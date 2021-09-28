@@ -19,11 +19,11 @@ mongoose.connect(process.env.DATABASE_URL);
 // mongoose.connect('mongodb://localhost:27017/books')
 seed();
 
-// console.log(Book.find({title: 'The Stand'}), '<---- WHAT IS CAPITAL B BOOK LOG ---<<<');
+// console.log(Book.find({title: 'The Stand'}), '<---- WHAT IS IN CAPITAL B BOOK LOG ---<<<');
 
 app.get('/books', async (request, response) => {
   const title = request.query;
-  console.log(title, '<---- REQUEST SEARCH QUERY LOG ---<<<');
+  console.log(request.query, '<---- REQUEST SEARCH QUERY LOG ---<<<');
   // response.send(books);
   try {
     // console.log(Book.find({title: 'From Hell'}), '<---- BOOK DOT FIND TITLE ---<<<');
@@ -31,7 +31,7 @@ app.get('/books', async (request, response) => {
     response.status(200).send(books)
   } catch (error){
     console.log('---> GET BOOKS ERROR LOG <---');
-    response.status(200).send('better luck next time')
+    response.status(400).send('better luck next time')
   }
 });
 app.listen(PORT, () => console.log(`listening on ${PORT}`));
