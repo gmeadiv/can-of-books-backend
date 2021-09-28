@@ -16,17 +16,13 @@ app.get('/test', (request, response) =>  {
 
 const Book = require('./models/books.js');
 mongoose.connect(process.env.DATABASE_URL);
-// mongoose.connect('mongodb://localhost:27017/books')
 seed();
-
-// console.log(Book.find({title: 'The Stand'}), '<---- WHAT IS IN CAPITAL B BOOK LOG ---<<<');
 
 app.get('/books', async (request, response) => {
   const title = request.query;
-  console.log(request.query, '<---- REQUEST SEARCH QUERY LOG ---<<<');
-  // response.send(books);
+  console.log(request.query.title, '<---- REQUEST SEARCH QUERY LOG ---<<<');
   try {
-    // console.log(Book.find({title: 'From Hell'}), '<---- BOOK DOT FIND TITLE ---<<<');
+    console.log(title.title, '<---- WHAT IS TITLE ---<<<');
     const books = await Book.find({title});
     response.status(200).send(books)
   } catch (error){
