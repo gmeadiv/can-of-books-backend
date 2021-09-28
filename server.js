@@ -1,35 +1,36 @@
 'use strict';
-
 require('dotenv').config();
+const seed = require('./seed.js')
 const express = require('express');
 const cors = require('cors');
+const mongoose = require('mongoose');
 
 const PORT = process.env.PORT || 3001;
 
 const app = express();
-
-const mongoose = require('mongoose');
-
-mongoose.connect('mongodb://localhost:27017/testone');
-
-// console.log(mongoose);
-const DB = mongoose.connection;
-DB.on('error', console.error.bind(console, 'connection error:'));
-DB.once('open', function () {
-  console.log('connected to the database!');
-});
-
-
-// const Cat = mongoose.model('Cat', { name: String });
-// const kitty = new Cat({ name: 'Zildjian' });
-// kitty.save().then(() => console.log('meow', '<---- MONGOOSE LOG ---<<<'));
-
 app.use(cors());
 
-app.get('/test', (request, response) => {
+app.get('/test', (request, response) =>  {
+  response.send('hello from the test')
+});
 
-  response.send('test request received')
+const Book = require('./models/books.js');
+mongoose.connect(process.env.DATABASE_URL);
+// mongoose.connect('mongodb://localhost:27017/books')
+console.log(mongoose.connect);
+seed();
 
-})
-
+app.get('/books', async (request, response) => {
+  const searchQuery = request.query;
+  // const books = await Book.find(searchQuery);
+  // console.log(books);
+  // response.send(books);
+  try {
+    const books = await Book.find(searchQuery);
+    console.log(books);
+    response.status(200).send(books)
+  } catch (error){
+    console.log('error');
+  }
+});
 app.listen(PORT, () => console.log(`listening on ${PORT}`));
