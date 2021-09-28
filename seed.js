@@ -8,7 +8,7 @@ const Book = require('./models/books.js');
 async function seed() {
     try {
         await Book.create ({
-            title: 'For Whome the Bell Rings',
+            title: 'For Whom the Bell Rings',
             description: 'Informs the reader for whom the bell rang',
             status: true,
             email: 'gmeadiv@gmail.com'
