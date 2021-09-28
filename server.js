@@ -23,7 +23,7 @@ seed();
 app.get('/books', async (request, response) => {
   const searchQuery = request.query;
   // const books = await Book.find(searchQuery);
-  // console.log(books);
+  console.log(request.query, '<---- REQUEST SEARCH QUERY LOG ---<<<');
   // response.send(books);
   try {
     const books = await Book.find(searchQuery);
