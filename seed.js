@@ -1,14 +1,14 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
 
-mongoose.connect(process.env.DATABASE_URL);
-
-const Book = require('./models/books.js');
+// mongoose.connect(process.env.DATABASE_URL);
 
 async function seed() {
+    await mongoose.connect(process.env.DATABASE_URL);
+    const Book = require('./models/books.js');
     try {
         await Book.create ({
-            title: 'For Whome the Bell Rings',
+            title: 'For Whom the Bell Rings',
             description: 'Informs the reader for whom the bell rang',
             status: true,
             email: 'gmeadiv@gmail.com'
@@ -29,6 +29,6 @@ async function seed() {
     } catch (error){
         console.log('error')
     }
-    
+    mongoose.disconnect();
 }
 module.exports = seed;
