@@ -18,7 +18,7 @@ app.get('/test', (request, response) =>  {
 const Book = require('./models/books.js');
 // seed();
 mongoose.connect(process.env.MONGODB_URI);
-console.log(Book.find({}), '<---- WHAT IS BOOKS LOG ---<<<');
+console.log(Book, '<---- WHAT IS MONGOOSE DOT MODELS LOG ---<<<');
 
 
 app.get('/books', async (request, response) => {
