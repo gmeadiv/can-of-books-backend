@@ -18,21 +18,27 @@ app.get('/test', (request, response) =>  {
 const Book = require('./models/books.js');
 // seed();
 mongoose.connect(process.env.MONGODB_URI);
-console.log(Book, '<---- WHAT IS MONGOOSE DOT MODELS LOG ---<<<');
-
 
 app.get('/books', async (request, response) => {
-  const query= {};
-  if(request.query.title) {
-    query.title = request.query.title
-  }
+  const query = {};
   console.log(request.query.title, '<---- REQUEST SEARCH QUERY LOG ---<<<');
-  try {
-    const books = await Book.find({});
-    response.status(200).send(books)
-  } catch (error){
-    console.log('---> GET BOOKS ERROR LOG <---');
-    response.status(400).send('better luck next time')
+  if(request.query.title === '') {
+    query.title = request.query.title
+    try {
+      const books = await Book.find({});
+      response.status(200).send(books)
+    } catch (error){
+      console.log('---> GET BOOKS ERROR LOG <---');
+      response.status(400).send('better luck next time')
+    }
+  } else {
+    try {
+      const books = await Book.find({title: request.query.title});
+      response.status(200).send(books)
+    } catch (error){
+      console.log('---> GET BOOKS ERROR LOG <---');
+      response.status(400).send('better luck next time')
+    }
   }
 });
 
