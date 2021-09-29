@@ -46,24 +46,25 @@ app.get('/books', async (request, response) => {
   }
 });
 
-// app.post('/books', async (request, response) => {
+app.post('/books', async (request, response) => {
   
-//   try {
-//     const bookInfo = request.body;
-//     // console.log(request.body, '<--------is this my bookinfo?');
+  try {
+    const bookInfo = request.body;
+    // console.log(bookInfo.title, '<---- BOOK INFO DOT TITLE LOG ---<<<');
 
-//     const newBook = await Book.create ({
-//       title: 'title',
-//       description: 'desc',
-//       status: true,
-//       email: 'aol.com'
-//     });
-//     response.status(201).send(newBook)
-//   } catch(error) {
-//     console.log('---> POST BOOKS ERROR LOG <---');
-//     response.status(500).send('you failed to fetch a book')
-//   }
-// });
+    const newBook = await Book.create ({
+      title: bookInfo.title,
+      description: bookInfo.description,
+      status: true,
+      email: bookInfo.email
+    });
+    console.log(newBook, '<---- CONFIRM NEW BOOK LOG ---<<<');
+    response.status(201).send(newBook)
+  } catch(error) {
+    console.log('---> POST BOOKS ERROR LOG <---');
+    response.status(500).send('you failed to fetch a book')
+  }
+});
 
 // app.delete('/books/:id', async (request, response) => {
 //   const id = request.params.id;
