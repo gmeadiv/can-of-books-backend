@@ -23,20 +23,24 @@ app.get('/books', async (request, response) => {
   const query = {};
   console.log(request.query.title, '<---- REQUEST SEARCH QUERY LOG ---<<<');
   if(request.query.title === '') {
-    query.title = request.query.title
     try {
       const books = await Book.find({});
       response.status(200).send(books)
     } catch (error){
-      console.log('---> GET BOOKS ERROR LOG <---');
+      console.log('---> GET ALL BOOKS ERROR LOG <---');
       response.status(400).send('better luck next time')
     }
   } else {
+    query.title = request.query.title
     try {
-      const books = await Book.find({title: request.query.title});
-      response.status(200).send(books)
+      const books = await Book.find({title: query.title});
+      if (books.length === 0) {
+        response.error(404).send(books.length)
+      } else {
+        response.status(200).send(books)
+      }
     } catch (error){
-      console.log('---> GET BOOKS ERROR LOG <---');
+      console.log('---> GET SPECIFIC BOOK ERROR LOG <---');
       response.status(400).send('better luck next time')
     }
   }
