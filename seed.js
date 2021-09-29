@@ -25,9 +25,8 @@ async function seed() {
             status: true,
             email: 'alanmoore@aol.com'
         });
-        mongoose.disconnect();
     } catch (error){
-        console.log('error')
+        console.log('error<-------------ERROR')
     }
     mongoose.disconnect();
 }

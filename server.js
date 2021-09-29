@@ -5,7 +5,7 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT;
 
 const app = express();
 app.use(cors());
@@ -16,25 +16,27 @@ app.get('/test', (request, response) =>  {
 });
 
 const Book = require('./models/books.js');
+// seed();
 mongoose.connect(process.env.DATABASE_URL);
-seed();
+
 
 app.get('/books', async (request, response) => {
-  const title = request.query;
-  console.log(request.query.title, '<---- REQUEST SEARCH QUERY LOG ---<<<');
+  const query= {};
+  if(request.query.title) {
+    query.title = request.query.title
+  }
+  // console.log(request.query.title, '<---- REQUEST SEARCH QUERY LOG ---<<<');
   try {
-    console.log(title.title, '<---- WHAT IS TITLE ---<<<');
-    const books = await Book.find({title});
+    const books = await Book.find({});
+    // console.log(books);
     response.status(200).send(books)
   } catch (error){
-    console.log('---> GET BOOKS ERROR LOG <---');
+    // console.log('---> GET BOOKS ERROR LOG <---');
     response.status(400).send('better luck next time')
   }
 });
 
 app.post('/books', async (request, response) => {
-  // const bookInfo = request.body;
-  // console.log(bookInfo, '<---- WHAT IS BOOK INFO ---<<<')
   try {
     const newBook = await Book.create ({
       title: bookInfo,
@@ -45,7 +47,7 @@ app.post('/books', async (request, response) => {
     response.status(201).send(newBook)
   } catch(error) {
     console.log('---> POST BOOKS ERROR LOG <---');
-    response.status(500).send('you failed to make a cat')
+    response.status(500).send('you failed to fetch a book')
   }
 });
 
