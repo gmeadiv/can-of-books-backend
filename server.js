@@ -9,7 +9,7 @@ const PORT = process.env.PORT;
 
 const app = express();
 app.use(cors());
-app.use(express.json())
+app.use(express.json());
 
 app.get('/test', (request, response) =>  {
   response.send('hello from the test')
@@ -37,12 +37,16 @@ app.get('/books', async (request, response) => {
 });
 
 app.post('/books', async (request, response) => {
+  
   try {
+    const bookInfo = request.body;
+    // console.log(request.body, '<--------is this my bookinfo?');
+
     const newBook = await Book.create ({
-      title: bookInfo,
-      description: 'Informs the reader for whom the bell rang',
+      title: 'title',
+      description: 'desc',
       status: true,
-      email: 'gmeadiv@gmail.com'
+      email: 'aol.com'
     });
     response.status(201).send(newBook)
   } catch(error) {
@@ -57,10 +61,10 @@ app.delete('/books/:id', async (request, response) => {
   try {
     await Book.findByIdAndDelete(id);
     response.status(202).send('Book Succesfully Burned')
-  } catch(error) {
-    console.log('---> DELETE BOOKS ERROR LOG <---');
+  } catch (error) {
+    // console.log('---> DELETE BOOKS ERROR LOG <---');
     response.status(500).send('No Books to Burn!')
   }
-})
+});
 
 app.listen(PORT, () => console.log(`listening on ${PORT}`));
