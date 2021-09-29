@@ -50,7 +50,7 @@ app.post('/books', async (request, response) => {
   
   try {
     const bookInfo = request.body;
-    // console.log(bookInfo.title, '<---- BOOK INFO DOT TITLE LOG ---<<<');
+    // console.log(request, '<---- REQUEST DOT QUERY LOG ---<<<');
 
     const newBook = await Book.create ({
       title: bookInfo.title,
