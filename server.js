@@ -21,7 +21,9 @@ mongoose.connect(process.env.MONGODB_URI);
 
 app.get('/books', async (request, response) => {
   const query = {};
+
   console.log(request.query, '<---- REQUEST SEARCH QUERY LOG ---<<<');
+
   if(request.query.title === '' && request.query.email === '') {
     try {
       const books = await Book.find({});
@@ -30,6 +32,7 @@ app.get('/books', async (request, response) => {
       console.log('---> GET ALL BOOKS ERROR LOG <---');
       response.status(400).send('better luck next time')
     }
+
   } else if (request.query.title === ''){
     query.email = request.query.email;
     try {
@@ -43,6 +46,7 @@ app.get('/books', async (request, response) => {
       console.log('---> GET BY EMAIL ERROR LOG <---');
       response.status(400).send('better luck next time')
     }
+
   } else {
     query.title = request.query.title;
     try {
