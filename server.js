@@ -98,6 +98,7 @@ app.delete('/books/:id', async (request, response) => {
   try {
     await Book.findByIdAndDelete(id);
     response.status(202).send('Book Succesfully Burned')
+    console.log('---> Book Succesfully Burned <---')
   } catch (error) {
     console.log('---> DELETE BOOKS ERROR LOG <---');
     response.status(500).send('No Books to Burn!')
