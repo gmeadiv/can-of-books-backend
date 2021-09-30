@@ -67,7 +67,7 @@ app.post('/books', async (request, response) => {
   
   try {
     const bookInfo = request.body;
-    // console.log(request, '<---- REQUEST DOT QUERY LOG ---<<<');
+    console.log(request, '<---- REQUEST DOT QUERY LOG ---<<<');
 
     const newBook = await Book.create ({
       title: bookInfo.title,
@@ -75,31 +75,34 @@ app.post('/books', async (request, response) => {
       status: true,
       email: bookInfo.email
     });
-    console.log(newBook, '<---- CONFIRM NEW BOOK LOG ---<<<');
+
+    console.log(newBook, '<---- NEW BOOK CONFIRMED ---<<<');
+
     response.status(201).send(newBook)
   } catch(error) {
     console.log('---> POST BOOKS ERROR LOG <---');
-    response.status(500).send('you failed to fetch a book')
+    response.status(500).send('you failed to post a book')
   }
 });
 
-// app.delete('/books/:id', async (request, response) => {
-//   const id = request.params.id;
+app.delete('/books/:id', async (request, response) => {
+  const id = request.params.id;
+  console.log(request.query.email, '<---- DELETE REQUEST LOG ---<<<');
 
-//   if (request.query.email) {
-//     const foundBook = await Book.findOne({_id: request.params.id, email: request.query.email});
+  if (request.query.email) {
+    const foundBook = await Book.findOne({_id: request.params.id, email: request.query.email});
 
-//     console.log(foundBook, '<---- FOUNDBOOK LOG ---<<<');
-//   }
+    console.log(foundBook, '<---- FOUNDBOOK LOG ---<<<');
+  }
 
-//   try {
-//     await Book.findByIdAndDelete(id);
-//     response.status(202).send('Book Succesfully Burned')
-//   } catch (error) {
-//     // console.log('---> DELETE BOOKS ERROR LOG <---');
-//     response.status(500).send('No Books to Burn!')
-//   }
-// });
+  try {
+    await Book.findByIdAndDelete(id);
+    response.status(202).send('Book Succesfully Burned')
+  } catch (error) {
+    console.log('---> DELETE BOOKS ERROR LOG <---');
+    response.status(500).send('No Books to Burn!')
+  }
+});
 
 // app.put('/books/:id', async (request, response) => {
 //   const id = request.params.id;
