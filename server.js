@@ -107,25 +107,24 @@ app.delete('/books/:id', async (request, response) => {
 });
 
 app.put('/books/:id', async (request, response) => {
-  console.log(request.body, '<---- REQUEST DOT BODY LOG ---<<<')
+  console.log(request.query, '<---- REQUEST DOT QUERY LOG ---<<<')
   const id = request.params.id;
-  const email = request.query.email;
 
-  try {
-    const bookToUpdate = await Book.findOne({_id: id, email});
+    try {
+      const bookToUpdate = await Book.findOne({_id: request.params.id, email: request.query.email});
 
-    if (!bookToUpdate) {
-      response.status(400).send('---> BOOK CANNOT BE UPDATED <---');
-      return;
-    } 
+      if (!bookToUpdate) {
+        response.status(400).send('---> BOOK CANNOT BE UPDATED <---');
+        return;
+      } 
 
-    const updatedBook = await Book.findByIdAndUpdate(id, request.body, {new: true});
-    console.log(updatedBook, '<---- UPDATED BOOK LOG ---<<<')
-    response.status(204).send(updatedBook);
+      const updatedBook = await Book.findByIdAndUpdate(id);
+      console.log(updatedBook, '<---- UPDATED BOOK LOG ---<<<')
+      response.status(204).send(updatedBook);
 
-  } catch (error) {
-    response.status(400).send(error, '<---- PUT BOOKS ERROR LOG ---<<<');
-  }
+    } catch (error) {
+      response.status(400).send(error, '<---- PUT BOOKS ERROR LOG ---<<<');
+    }
 });
 
 // app.getUser('/user', request, response) {
