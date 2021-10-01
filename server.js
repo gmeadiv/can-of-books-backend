@@ -16,6 +16,7 @@ app.get('/test', (request, response) =>  {
 });
 
 const Book = require('./models/books.js');
+const { response } = require('express');
 // seed();
 mongoose.connect(process.env.MONGODB_URI);
 
@@ -87,7 +88,7 @@ app.post('/books', async (request, response) => {
 
 app.delete('/books/:id', async (request, response) => {
   const id = request.params.id;
-  console.log(request.query.email, '<---- DELETE REQUEST LOG ---<<<');
+  console.log(request, '<---- DELETE REQUEST LOG ---<<<');
 
   if (request.query.email) {
     const foundBook = await Book.findOne({_id: request.params.id, email: request.query.email});
@@ -105,10 +106,35 @@ app.delete('/books/:id', async (request, response) => {
   }
 });
 
-// app.put('/books/:id', async (request, response) => {
-//   const id = request.params.id;
-//   let updatedBook = await Book.findByIdAndUpdate(id, {...request.body});
-//   response.status(204).send(updatedBook);
-// })
+app.put('/books/:id', async (request, response) => {
+  console.log(request.query, '<---- REQUEST DOT QUERY LOG ---<<<')
+  const id = request.params.id;
+
+    try {
+      const bookToUpdate = await Book.findOne({_id: request.params.id, email: request.query.email});
+
+      if (!bookToUpdate) {
+        response.status(400).send('---> BOOK CANNOT BE UPDATED <---');
+        return;
+      } 
+
+      const updatedBook = await Book.findByIdAndUpdate(id);
+      console.log(updatedBook, '<---- UPDATED BOOK LOG ---<<<')
+      response.status(204).send(updatedBook);
+
+    } catch (error) {
+      response.status(400).send(error, '<---- PUT BOOKS ERROR LOG ---<<<');
+    }
+});
+
+// app.getUser('/user', request, response) {
+//   verifyUser(request, (err, user) => {
+//     if (err) {
+//       response.send('invalid token')
+//     } else {
+//       response.send(user)
+//     }
+//   })
+// }
 
 app.listen(PORT, () => console.log(`listening on ${PORT}`));
