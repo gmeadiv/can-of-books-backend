@@ -20,10 +20,6 @@ const { response } = require('express');
 // seed();
 mongoose.connect(process.env.MONGODB_URI);
 
-app.get('/profile', async (request, response) => {
-  response.send('YOU ARE AT THE PROFILE PAGE')
-});
-
 app.get('/books', async (request, response) => {
   const query = {};
 
@@ -110,11 +106,27 @@ app.delete('/books/:id', async (request, response) => {
   }
 });
 
-// app.put('/books/:id', async (request, response) => {
-//   const id = request.params.id;
-//   let updatedBook = await Book.findByIdAndUpdate(id, {...request.body});
-//   response.status(204).send(updatedBook);
-// })
+app.put('/books/:id', async (request, response) => {
+  console.log(request.body, '<---- REQUEST DOT BODY LOG ---<<<')
+  const id = request.params.id;
+  const email = request.query.email;
+
+  try {
+    const bookToUpdate = await Book.findOne({_id: id, email});
+
+    if (!bookToUpdate) {
+      response.status(400).send('---> BOOK CANNOT BE UPDATED <---');
+      return;
+    } 
+
+    const updatedBook = await Book.findByIdAndUpdate(id, request.body, {new: true});
+    console.log(updatedBook, '<---- UPDATED BOOK LOG ---<<<')
+    response.status(204).send(updatedBook);
+
+  } catch (error) {
+    response.status(400).send(error, '<---- PUT BOOKS ERROR LOG ---<<<');
+  }
+});
 
 // app.getUser('/user', request, response) {
 //   verifyUser(request, (err, user) => {
