@@ -20,6 +20,10 @@ const { response } = require('express');
 // seed();
 mongoose.connect(process.env.MONGODB_URI);
 
+app.get('/profile', async (request, response) => {
+  response.send('YOU ARE AT THE PROFILE PAGE')
+});
+
 app.get('/books', async (request, response) => {
   const query = {};
 
