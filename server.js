@@ -126,14 +126,4 @@ app.put('/books/:id', async (request, response) => {
     }
 });
 
-// app.getUser('/user', request, response) {
-//   verifyUser(request, (err, user) => {
-//     if (err) {
-//       response.send('invalid token')
-//     } else {
-//       response.send(user)
-//     }
-//   })
-// }
-
 app.listen(PORT, () => console.log(`listening on ${PORT}`));
