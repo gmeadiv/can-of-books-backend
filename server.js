@@ -1,6 +1,5 @@
 'use strict';
 require('dotenv').config();
-const seed = require('./seed.js')
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
@@ -17,7 +16,6 @@ app.get('/test', (request, response) =>  {
 
 const Book = require('./models/books.js');
 const { response } = require('express');
-// seed();
 mongoose.connect(process.env.MONGODB_URI);
 
 app.get('/books', async (request, response) => {
@@ -107,18 +105,19 @@ app.delete('/books/:id', async (request, response) => {
 });
 
 app.put('/books/:id', async (request, response) => {
-  console.log(request.query, '<---- REQUEST DOT QUERY LOG ---<<<')
   const id = request.params.id;
+  const bookInfo = request.body;
+  console.log(request.body, '<---- REQUEST DOT BODY LOG ---<<<')
 
     try {
-      const bookToUpdate = await Book.findOne({_id: request.params.id, email: request.query.email});
+      const bookToUpdate = await Book.findOne({_id: id});
 
       if (!bookToUpdate) {
         response.status(400).send('---> BOOK CANNOT BE UPDATED <---');
         return;
       } 
 
-      const updatedBook = await Book.findByIdAndUpdate(id);
+      const updatedBook = await Book.findByIdAndUpdate(id, bookInfo, {new: true});
       console.log(updatedBook, '<---- UPDATED BOOK LOG ---<<<')
       response.status(204).send(updatedBook);
 
